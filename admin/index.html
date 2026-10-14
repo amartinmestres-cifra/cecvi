@@ -60,7 +60,7 @@ function openEditor(index=-1){
 }
 function closeEditor(){el('editing').classList.add('hidden');el('listing').classList.remove('hidden');setStatus('')}
 async function saveJson(message){
- const content=toBase64(JSON.stringify({publicaciones},null,2)+'\n');
+ const content=toBase64(JSON.stringify({publicaciones: publications},null,2)+'\n');
  try{await api('/contents/content/publicaciones.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,content,sha:currentSha,branch:'main'})})}
  catch(e){await load();throw Error('No se pudieron publicar los cambios. Se ha recargado la versión del repositorio: '+e.message)}
  await load();
