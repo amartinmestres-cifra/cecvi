@@ -42,7 +42,7 @@ async function load(){
  const file=await api('/contents/content/publicaciones.json?ref=main');
  currentSha=file.sha;const data=JSON.parse(fromBase64(file.content));publications=Array.isArray(data.publicaciones)?data.publicaciones:[];draw();
 }
-function safeImage(url){if(typeof url!=='string')return '';if(url.startsWith('https://'))return url;if(url.startsWith('/assets/'))return '..'+url;if(url.startsWith('assets/'))return '../'+url;return ''}
+function safeImage(url){if(typeof url!=='string')return '';if(url.startsWith('https://'))return url;const path=url.replace(/^\//,'');if(!/^assets\/publicaciones\/[a-zA-Z0-9._-]+$/.test(path))return '';return 'https://raw.githubusercontent.com/'+REPO+'/main/'+path}
 function draw(){
  const box=el('items');box.replaceChildren();
  if(!publications.length){const p=document.createElement('p');p.className='list-empty';p.textContent='Todavía no hay publicaciones. Pulsa «Nueva publicación» para empezar.';box.append(p);return}
