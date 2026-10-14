@@ -112,7 +112,7 @@ window.addEventListener('message',async event=>{
  const data=JSON.parse(event.data.slice('authorization:github:success:'.length));if(!data.token)throw Error('Token no recibido');token=data.token;
  const user=await api('https://api.github.com/user');const repo=await api('');
  if(!repo.permissions?.push)throw Error('Tu cuenta no tiene permisos de escritura sobre el repositorio CECVi.');
- el('username').textContent='Conectado: @'+user.login;await Promise.all([load(),loadAgenda()]);el('login').classList.add('hidden');el('workspace').classList.remove('hidden');
+ el('username').textContent='Conectado: @'+user.login;await load();el('login').classList.add('hidden');el('workspace').classList.remove('hidden');loadAgenda().catch(err=>setStatus('Sesión iniciada. No se pudo cargar la agenda: '+err.message,true));
  }catch(e){token='';alert('No se pudo acceder: '+e.message)}finally{if(loginPopup&&!loginPopup.closed)loginPopup.close();loginPopup=null}
 });
 
