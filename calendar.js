@@ -7,7 +7,7 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const fmt=s=>new Date(s+'T12:00:00').toLocaleDateString('gl-ES',{day:'numeric',month:'long',year:'numeric'});
 const dateKey=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const matches=e=>(!document.querySelector('#region').value||e.region===document.querySelector('#region').value)&&(!document.querySelector('#weapon').value||e.weapon==='Todas'||e.weapon===document.querySelector('#weapon').value);
-const card=e=>`<article class="fixture"><div class="fixture-date">${esc(fmt(e.start))}${e.end!==e.start?' — '+esc(fmt(e.end)):''}</div><span class="fixture-status">${e.provisional?'PROVISIONAL':'CONVOCATORIA'} · ${esc(e.region)}</span><h3>${esc(e.title)}</h3><p>${esc(e.category)} · ${esc(e.weapon)}<br>${esc(e.place)}</p>${e.note?'<p>'+esc(e.note)+'</p>':''}<a href="assets/${e.source}.pdf" target="_blank" rel="noopener">Ver documento completo ↗</a></article>`;
+const card=e=>`<article class="fixture"><div class="fixture-date">${esc(fmt(e.start))}${e.end!==e.start?' — '+esc(fmt(e.end)):''}</div><span class="fixture-status">${e.provisional?'PROVISIONAL':'CONVOCATORIA'} · ${esc(e.region)}</span><h3>${esc(e.title)}</h3><p>${esc(e.category)} · ${esc(e.weapon)}<br>${esc(e.place)}</p>${e.note?'<p>'+esc(e.note)+'</p>':''}${e.source && /^[a-z0-9_-]+$/.test(e.source)?`<a href="assets/${e.source}.pdf" target="_blank" rel="noopener">Ver documento completo ↗</a>`:""}</article>`;
 function render(){
 document.querySelector('#today-label').textContent='Hoxe: '+fmt(today)+' · Europe/Madrid';
 const [y,m]=month.split('-').map(Number), first=new Date(y,m-1,1),last=new Date(y,m,0).getDate();
