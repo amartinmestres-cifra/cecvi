@@ -1,1 +1,10 @@
-{"publicaciones":[]}
+{
+  "publicaciones": [
+    {
+      "titulo": "afaddsf",
+      "fecha": "2026-10-14",
+      "imagen": "/assets/publicaciones/ec9d4188-d149-4a0b-86b9-2759abe6cc5d.png",
+      "texto": "asdfasdf"
+    }
+  ]
+}
