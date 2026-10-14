@@ -3,13 +3,13 @@
 <title>CECVi · Administración</title>
 <style>
 :root{font-family:Inter,system-ui,sans-serif;color:#181818;background:#f4f4f5}*{box-sizing:border-box}body{margin:0}button,input,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:wait}.header{background:#111;color:white;padding:16px 4%;display:flex;align-items:center;gap:15px}.header img{height:56px;width:70px;object-fit:contain}.header h1{font-size:1.15rem;margin:0}.header small{color:#ccc}.header a{color:white;margin-left:auto;text-decoration:none}.container{max-width:1150px;margin:32px auto;padding:0 20px}.notice{background:white;border-left:4px solid #333;padding:16px 20px;line-height:1.55;border-radius:5px}.layout{display:grid;grid-template-columns:250px 1fr;gap:24px;margin-top:24px}.panel{background:white;border:1px solid #e3e3e3;border-radius:10px;padding:22px;box-shadow:0 6px 20px #00000008}nav button{width:100%;text-align:left;border:0;background:transparent;padding:15px;font-weight:700;border-radius:7px}nav button.active{background:#111;color:white}.button{background:#111;color:#fff;border:0;border-radius:6px;padding:12px 18px;font-weight:700}.secondary{background:#efefef;color:#151515}.danger{background:#a32222}.line{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.line h2{margin:0 auto 0 0}.muted{color:#666}.item{padding:15px 0;border-bottom:1px solid #eee;display:flex;gap:14px;align-items:center}.item img{width:75px;height:65px;object-fit:cover;border-radius:5px;background:#eee}.item strong{display:block}.item .actions{margin-left:auto;display:flex;gap:8px}.item button{border:1px solid #ddd;padding:8px;border-radius:5px;background:white}.form{display:grid;gap:16px}.form label{display:grid;gap:7px;font-weight:650}.form input,.form textarea{width:100%;border:1px solid #ccc;padding:12px;border-radius:6px}.form textarea{min-height:180px;resize:vertical}.thumb{max-height:180px;max-width:100%;object-fit:contain}.hidden{display:none!important}#status{margin:15px 0;color:#494949;min-height:24px}#status.error{color:#ac2525}.login{max-width:580px;margin:80px auto;text-align:center}.login h2{font-size:2rem}.list-empty{padding:35px;text-align:center;color:#777}.subtext{font-size:.88rem;color:#666} .pill{background:#eee;border-radius:30px;padding:6px 10px;font-size:.8rem}@media(max-width:760px){.layout{grid-template-columns:1fr}.header{padding:12px}.header h1{font-size:1rem}.container{margin:15px auto}.panel{padding:17px}.item .actions{flex-direction:column}}
-</style></head><body>
+select{border:1px solid #ccc;border-radius:6px;padding:12px;background:white}#event-list .item{display:flex;justify-content:space-between}.event-meta{font-size:.85rem;color:#666}#event-editor .form{margin-top:22px}#agenda-panel{margin-top:4px}</style></head><body>
 <header class="header"><img src="../assets/logo2.png" alt="Logo CECVi"><div><h1>CECVi · Administración</h1><small>Panel de publicacións do club</small></div><a href="../index.html">← Volver á web</a></header>
 <main class="container">
 <div class="notice"><strong>Publicación de cambios</strong><div>Al publicar se crea un commit en GitHub. Si Render tiene Auto-Deploy activado desde <code>main</code>, la web se actualizará automáticamente. <strong>Los cambios pueden tardar unos minutos en aparecer.</strong></div></div>
 <section id="login" class="panel login"><h2>Gestiona CECVi</h2><p class="muted">Inicia sesión con tu cuenta de GitHub para añadir, editar o eliminar publicaciones. Solo podrán publicar las cuentas con acceso de escritura al repositorio.</p><button class="button" id="login-button">Entrar con GitHub ↗</button></section>
 <section id="workspace" class="hidden">
-<div class="layout"><nav class="panel"><button class="active" id="nav-news">📰 Publicaciones</button><button id="logout" class="secondary">Cerrar sesión</button><p class="subtext" id="username"></p></nav>
+<div class="layout"><nav class="panel"><button class="active" id="nav-news">📰 Publicaciones</button><button id="nav-agenda">📅 Agenda</button><button id="logout" class="secondary">Cerrar sesión</button><p class="subtext" id="username"></p></nav>
 <div class="panel">
 <div id="listing"><div class="line"><h2>Publicaciones</h2><button class="button" id="new">+ Nueva publicación</button></div><p class="muted">Noticias y fotografías que aparecen en la portada de CECVi.</p><div id="items"></div></div>
 <div id="editing" class="hidden"><div class="line"><h2 id="editor-title">Nueva publicación</h2><button class="button secondary" id="cancel">← Volver</button></div><form class="form" id="post-form">
@@ -18,6 +18,18 @@
 <label>Fotografía (opcional)<input id="photo" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><img id="preview" class="thumb hidden" alt="Vista previa"><span class="subtext">JPG, PNG, WebP o GIF · máximo 8 MB. Se guardará en el repositorio.</span></label>
 <label>Texto de la publicación<textarea id="body" required placeholder="Escribe aquí la noticia..."></textarea></label>
 <div class="line"><button type="submit" class="button" id="publish">Publicar cambios</button><button type="button" class="button secondary" id="cancel2">Cancelar</button></div></form></div>
+<div id="agenda-panel" class="hidden"><div class="line"><h2>Agenda de competicións</h2><button class="button" id="new-event">+ Novo evento</button></div><p class="muted">Edita as citas existentes ou crea novas. Os cambios publicaranse en GitHub.</p><div id="event-list"></div></div>
+<div id="event-editor" class="hidden"><div class="line"><h2 id="event-heading">Novo evento</h2><button type="button" id="event-cancel" class="button secondary">← Volver</button></div><form id="event-form" class="form">
+<label>Título<input id="event-title" maxlength="200" required></label>
+<label>Data de inicio<input id="event-start" type="date" required></label>
+<label>Data de fin<input id="event-end" type="date"></label>
+<label>Ámbito<select id="event-region"><option>Galicia</option><option>España</option><option>Portugal</option></select></label>
+<label>Arma<select id="event-weapon"><option>Espada</option><option>Florete</option><option>Sabre</option><option>Todas</option></select></label>
+<label>Categoría<input id="event-category" placeholder="M15, M17, Absoluta…" required></label>
+<label>Lugar<input id="event-place" placeholder="Pavillón, cidade…"></label>
+<label>Observacións<textarea id="event-note" placeholder="Horarios, convocatoria, información de inscrición…"></textarea></label>
+<label><span><input type="checkbox" id="event-provisional" checked style="width:auto"> Data provisional</span></label>
+<div class="line"><button class="button" id="event-save" type="submit">Publicar evento</button><button class="button secondary" type="button" id="event-cancel2">Cancelar</button></div></form></div>
 <p id="status" role="status" aria-live="polite"></p></div></div></section>
 </main>
 <script>
@@ -26,7 +38,7 @@
 const REPO='amartinmestres-cifra/cecvi';
 const BASE='https://api.github.com/repos/'+REPO;
 const OAUTH='https://cecvi-auth.amartinmestres.workers.dev';
-let token='',publications=[],currentSha='',editIndex=-1,busy=false,loginPopup=null;
+let token='',publications=[],currentSha='',editIndex=-1,busy=false,loginPopup=null,agendaEvents=[],agendaSha='',eventIndex=-1,activeTab='news';
 const el=id=>document.getElementById(id);
 const setStatus=(value,error=false)=>{el('status').textContent=value;el('status').classList.toggle('error',error)};
 const setBusy=v=>{busy=v;el('publish').disabled=v;el('new').disabled=v};
@@ -53,7 +65,7 @@ function draw(){
  const actions=document.createElement('div');actions.className='actions';const edit=document.createElement('button');edit.textContent='Editar';edit.onclick=()=>openEditor(index);const del=document.createElement('button');del.textContent='Eliminar';del.onclick=()=>remove(index);actions.append(edit,del);row.append(actions);box.append(row);
  });
 }
-function openEditor(index=-1){
+function openEditor(index=-1){showSection('news');
  editIndex=index;const item=index<0?{}:publications[index];el('editor-title').textContent=index<0?'Nueva publicación':'Editar publicación';el('title').value=item.titulo||'';el('date').value=item.fecha||new Date().toLocaleDateString('en-CA');el('body').value=item.texto||'';el('photo').value='';
  const src=safeImage(item.imagen);el('preview').classList.toggle('hidden',!src);if(src)el('preview').src=src;
  el('listing').classList.add('hidden');el('editing').classList.remove('hidden');setStatus('');
@@ -100,9 +112,19 @@ window.addEventListener('message',async event=>{
  const data=JSON.parse(event.data.slice('authorization:github:success:'.length));if(!data.token)throw Error('Token no recibido');token=data.token;
  const user=await api('https://api.github.com/user');const repo=await api('');
  if(!repo.permissions?.push)throw Error('Tu cuenta no tiene permisos de escritura sobre el repositorio CECVi.');
- el('username').textContent='Conectado: @'+user.login;await load();el('login').classList.add('hidden');el('workspace').classList.remove('hidden');
+ el('username').textContent='Conectado: @'+user.login;await Promise.all([load(),loadAgenda()]);el('login').classList.add('hidden');el('workspace').classList.remove('hidden');
  }catch(e){token='';alert('No se pudo acceder: '+e.message)}finally{if(loginPopup&&!loginPopup.closed)loginPopup.close();loginPopup=null}
 });
+
+function showSection(section){activeTab=section;el('listing').classList.toggle('hidden',section!=='news');el('editing').classList.add('hidden');el('agenda-panel').classList.toggle('hidden',section!=='agenda');el('event-editor').classList.add('hidden');el('nav-news').classList.toggle('active',section==='news');el('nav-agenda').classList.toggle('active',section==='agenda');setStatus('')}
+async function loadAgenda(){const file=await api('/contents/content/agenda.json?ref=main');agendaSha=file.sha;const data=JSON.parse(fromBase64(file.content));agendaEvents=Array.isArray(data.events)?data.events:[];drawAgenda()}
+function drawAgenda(){const box=el('event-list');box.replaceChildren();const sorted=agendaEvents.map((e,i)=>({...e,index:i})).sort((a,b)=>a.start.localeCompare(b.start));for(const event of sorted){const row=document.createElement('div');row.className='item';const info=document.createElement('div');const title=document.createElement('strong');title.textContent=event.title;const subtitle=document.createElement('span');subtitle.className='event-meta';subtitle.textContent=event.start+(event.end&&event.end!==event.start?' — '+event.end:'')+' · '+event.region+' · '+event.weapon;info.append(title,subtitle);row.append(info);const actions=document.createElement('div');actions.className='actions';const edit=document.createElement('button');edit.textContent='Editar';edit.onclick=()=>openEvent(event.index);const del=document.createElement('button');del.textContent='Eliminar';del.onclick=()=>deleteEvent(event.index);actions.append(edit,del);row.append(actions);box.append(row)}if(!sorted.length)box.textContent='Non hai eventos.'}
+function openEvent(i=-1){eventIndex=i;const e=i<0?{}:agendaEvents[i];el('agenda-panel').classList.add('hidden');el('event-editor').classList.remove('hidden');el('event-heading').textContent=i<0?'Novo evento':'Editar evento';for(const [name,key] of [['title','event-title'],['start','event-start'],['end','event-end'],['category','event-category'],['place','event-place'],['note','event-note']])el(key).value=e[name]||'';el('event-region').value=e.region||'Galicia';el('event-weapon').value=e.weapon||'Espada';el('event-provisional').checked=e.provisional!==false;setStatus('')}
+async function saveAgenda(message){const content=toBase64(JSON.stringify({events:agendaEvents},null,2)+'\n');await api('/contents/content/agenda.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,content,sha:agendaSha,branch:'main'})});await loadAgenda()}
+async function deleteEvent(i){if(busy||!confirm('Eliminar este evento da axenda?'))return;setBusy(true);try{agendaEvents.splice(i,1);await saveAgenda('CECVi: eliminar evento da axenda');setStatus('Evento eliminado. Os cambios aparecerán en Render dentro duns minutos.')}catch(e){setStatus(e.message,true);await loadAgenda()}finally{setBusy(false)}}
+el('event-form').onsubmit=async e=>{e.preventDefault();if(busy)return;setBusy(true);el('event-save').disabled=true;try{const start=el('event-start').value,end=el('event-end').value||start;if(end<start)throw Error('A data de fin non pode ser anterior á de inicio.');const old=eventIndex>=0?agendaEvents[eventIndex]:{};const updated={...old,start,end,title:el('event-title').value.trim(),region:el('event-region').value,weapon:el('event-weapon').value,category:el('event-category').value.trim(),place:el('event-place').value.trim()||'Sede por confirmar',note:el('event-note').value.trim(),provisional:el('event-provisional').checked,source:old.source||''};if(eventIndex>=0)agendaEvents[eventIndex]=updated;else agendaEvents.push(updated);await saveAgenda('CECVi: '+(eventIndex<0?'crear':'editar')+' evento '+updated.title);showSection('agenda');setStatus('Evento publicado. Os cambios poden tardar uns minutos en aparecer.')}catch(error){setStatus(error.message,true);await loadAgenda()}finally{setBusy(false);el('event-save').disabled=false}};
+el('nav-agenda').onclick=()=>showSection('agenda');el('nav-news').onclick=()=>showSection('news');el('new-event').onclick=()=>openEvent();el('event-cancel').onclick=()=>showSection('agenda');el('event-cancel2').onclick=()=>showSection('agenda');
+
 el('login-button').onclick=()=>{loginPopup=window.open(OAUTH+'/auth','cecvi-oauth','width=650,height=750');if(!loginPopup)alert('Permite las ventanas emergentes para iniciar sesión.')};
 })();
 </script></body></html>
