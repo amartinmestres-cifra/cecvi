@@ -63,7 +63,21 @@ for(let n=1;n<=last;n++){const key=month+'-'+String(n).padStart(2,'0'),list=even
 document.querySelector('#days').innerHTML=cells.join('');
 const list=events.filter(matches).filter(e=>selected?e.start<=selected&&e.end>=selected:document.querySelector('#show-past').checked||e.end>=today).sort((a,b)=>a.start.localeCompare(b.start));
 document.querySelector('#list-title').textContent=selected?'Eventos do '+fmt(selected):'Próximas citas · '+list.length;
-document.querySelector('#fixtures').innerHTML=list.map(card).join('')||'<p>Non hai citas nesta selección. Proba outro día ou filtro.</p>';
+const container=document.querySelector('#fixtures');
+const previouslyOpen=new Set([...container.querySelectorAll('details.month-events[open]')].map(el=>el.dataset.month));
+if(selected){container.innerHTML=list.map(card).join('')||'<p>Non hai citas nesta selección. Proba outro día ou filtro.</p>';}
+else if(!list.length){container.innerHTML='<p>Non hai citas nesta selección. Proba outro día ou filtro.</p>';}
+else{
+  const groups=new Map();
+  list.forEach(e=>{const key=e.start.slice(0,7);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(e);});
+  const firstMonth=groups.keys().next().value;
+  container.innerHTML=[...groups].map(([key,items])=>{
+    const [year,mon]=key.split('-').map(Number);
+    const label=new Date(year,mon-1,1).toLocaleDateString('gl-ES',{month:'long',year:'numeric'});
+    const expanded=previouslyOpen.size?previouslyOpen.has(key):key===firstMonth;
+    return '<details class="month-events" data-month="'+key+'" '+(expanded?'open':'')+'><summary><span class="month-title">'+esc(label)+'</span><span class="month-count">'+items.length+' evento'+(items.length!==1?'s':'')+'</span><span class="month-chevron" aria-hidden="true">⌄</span></summary><div class="month-fixtures">'+items.map(card).join('')+'</div></details>';
+  }).join('');
+}
 document.querySelector('#clear-day').hidden=!selected;
 document.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>{selected=b.dataset.day;render();document.querySelector('#list-title').scrollIntoView({behavior:'smooth',block:'start'});});
 document.querySelectorAll('[data-expires]').forEach(el=>el.hidden=el.dataset.expires<today);
