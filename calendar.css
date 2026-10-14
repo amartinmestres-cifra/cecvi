@@ -2,3 +2,16 @@
 
 /* Axenda compacta organizada en meses despregables. */
 .fixtures{display:block}.month-events{border:1px solid #4b4b4b;border-radius:9px;margin:0 0 12px;overflow:hidden;background:#161616}.month-events>summary{display:flex;align-items:center;gap:14px;padding:19px 20px;cursor:pointer;list-style:none;min-height:64px}.month-events>summary::-webkit-details-marker{display:none}.month-title{font-size:1.12rem;font-weight:850;text-transform:capitalize;flex:1}.month-count{font-size:.8rem;color:#ccc;white-space:nowrap}.month-chevron{font-size:1.45rem;line-height:1;transition:transform .2s}.month-events[open] .month-chevron{transform:rotate(180deg)}.month-events>summary:hover{background:#262626}.month-fixtures{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:0 14px 14px}.month-fixtures .fixture{background:#202020}@media(max-width:720px){.month-fixtures{grid-template-columns:1fr;padding:0 10px 10px}.month-events>summary{padding:16px 14px}.month-title{font-size:1rem}.month-count{font-size:.75rem}.month-fixtures .fixture{padding:18px}}
+
+/* Estilo visual dos grupos mensuais, sen marcadores do navegador. */
+#fixtures details.month-events{display:block;border:1px solid #393939;background:#171717;border-radius:12px;margin:0 0 12px;overflow:hidden}
+#fixtures details.month-events > summary{display:flex!important;align-items:center;gap:12px;list-style:none!important;list-style-type:none!important;padding:17px 18px;cursor:pointer;background:#1c1c1c;color:#fff}
+#fixtures details.month-events > summary::marker{content:"";font-size:0}
+#fixtures details.month-events > summary::-webkit-details-marker{display:none!important}
+#fixtures .month-title{flex:1;min-width:0;font-size:1rem;font-weight:800;letter-spacing:.01em;text-transform:capitalize}
+#fixtures .month-count{flex:none;font-size:.73rem;font-weight:700;color:#bbb;background:#303030;padding:6px 9px;border-radius:99px;white-space:nowrap}
+#fixtures .month-chevron{flex:none;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;font-size:1.35rem;transform:none;transition:transform .2s;color:#eee}
+#fixtures details.month-events[open] .month-chevron{transform:rotate(180deg)}
+#fixtures details.month-events[open] > summary{border-bottom:1px solid #353535;background:#252525}
+#fixtures .month-fixtures{padding:14px;gap:12px}
+@media(max-width:720px){#fixtures details.month-events > summary{padding:14px 12px;gap:7px}#fixtures .month-title{font-size:.96rem}#fixtures .month-count{font-size:.7rem;padding:5px 7px}#fixtures .month-fixtures{padding:10px}}
