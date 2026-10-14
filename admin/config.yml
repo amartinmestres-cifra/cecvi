@@ -2,14 +2,16 @@ backend:
   name: github
   repo: amartinmestres-cifra/cecvi
   branch: main
+  base_url: https://cecvi-auth.amartinmestres.workers.dev
+  auth_endpoint: auth
 
 # Requiere habilitar proveedor OAuth para GitHub antes del primer acceso.
 # La autenticación no puede hacerse de forma segura solo con GitHub Pages/Render estático.
 locale: es
 media_folder: assets/publicaciones
 public_folder: /assets/publicaciones
-site_url: https://amartinmestres-cifra.github.io/cecvi/
-display_url: https://amartinmestres-cifra.github.io/cecvi/
+site_url: https://cecvi.onrender.com
+display_url: https://cecvi.onrender.com
 collections:
   - name: contenido
     label: Contenidos del club
