@@ -1,0 +1,30 @@
+backend:
+  name: github
+  repo: amartinmestres-cifra/cecvi
+  branch: main
+
+# Requiere habilitar proveedor OAuth para GitHub antes del primer acceso.
+# La autenticación no puede hacerse de forma segura solo con GitHub Pages/Render estático.
+locale: es
+media_folder: assets/publicaciones
+public_folder: /assets/publicaciones
+site_url: https://amartinmestres-cifra.github.io/cecvi/
+display_url: https://amartinmestres-cifra.github.io/cecvi/
+collections:
+  - name: contenido
+    label: Contenidos del club
+    files:
+      - name: publicaciones
+        label: Noticias y publicaciones
+        file: content/publicaciones.json
+        format: json
+        fields:
+          - label: Publicaciones
+            name: publicaciones
+            widget: list
+            summary: "{{fields.titulo}}"
+            fields:
+              - {label: Título, name: titulo, widget: string}
+              - {label: Fecha, name: fecha, widget: datetime, format: "YYYY-MM-DD"}
+              - {label: Fotografía, name: imagen, widget: image, required: false}
+              - {label: Texto, name: texto, widget: text}
