@@ -503,6 +503,30 @@
       "note": "",
       "source": "portugal",
       "provisional": true
+    },
+    {
+      "start": "2026-11-07",
+      "end": "2026-11-08",
+      "title": "Torneo Internacional Torre de Hércules · Espada M17 e absoluta",
+      "weapon": "Espada",
+      "category": "M17 · Absoluta · masculino e feminino",
+      "note": "Sábado: espada masculina M17 ás 11:30; espada feminina M17 ás 14:30. Domingo: espada masculina absoluta ás 9:30; espada feminina absoluta ás 11:30.",
+      "region": "Galicia",
+      "place": "Polideportivo San Francisco Javier · A Coruña",
+      "source": "torre-hercules",
+      "provisional": false
+    },
+    {
+      "start": "2026-11-07",
+      "end": "2026-11-07",
+      "title": "Torneo Internacional Torre de Hércules · Florete M17",
+      "weapon": "Florete",
+      "category": "M17 · masculino e feminino",
+      "note": "Sábado: florete feminino M17 ás 11:30; florete masculino M17 ás 14:30. Curso de arbitraxe nacional M17 ás 9:00.",
+      "region": "Galicia",
+      "place": "Polideportivo San Francisco Javier · A Coruña",
+      "source": "torre-hercules",
+      "provisional": false
     }
   ]
 }
