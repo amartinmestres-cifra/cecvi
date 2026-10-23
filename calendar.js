@@ -4,14 +4,16 @@ try { const response=await fetch('content/agenda.json',{cache:'no-store'}); if(!
 const today=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Madrid',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 let month=today.slice(0,7),selected='';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmt=s=>new Date(s+'T12:00:00').toLocaleDateString('gl-ES',{day:'numeric',month:'long',year:'numeric'});
+const MONTHS=['xaneiro','febreiro','marzo','abril','maio','xuño','xullo','agosto','setembro','outubro','novembro','decembro'];
+const fmt=s=>{const [y,m,d]=s.split('-').map(Number);return d+' de '+MONTHS[m-1]+' de '+y};
+const monthLabel=(y,m)=>MONTHS[m-1][0].toUpperCase()+MONTHS[m-1].slice(1)+' '+y;
 const dateKey=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const matches=e=>(!document.querySelector('#region').value||e.region===document.querySelector('#region').value)&&(!document.querySelector('#weapon').value||e.weapon==='Todas'||e.weapon===document.querySelector('#weapon').value);
 const card=e=>`<article class="fixture"><div class="fixture-date">${esc(fmt(e.start))}${e.end!==e.start?' — '+esc(fmt(e.end)):''}</div><span class="fixture-status">${e.provisional?'PROVISIONAL':'CONVOCATORIA'} · ${esc(e.region)}</span><h3>${esc(e.title)}</h3><p>${esc(e.category)} · ${esc(e.weapon)}<br>${esc(e.place)}</p>${e.note?'<p>'+esc(e.note)+'</p>':''}${e.source && /^[a-z0-9_-]+$/.test(e.source)?`<a href="assets/${e.source}.pdf" target="_blank" rel="noopener">Ver documento completo ↗</a>`:""}</article>`;
 function render(){
-document.querySelector('#today-label').textContent='Hoxe: '+fmt(today)+' · Europe/Madrid';
+document.querySelector('#today-label').textContent='Hoxe: '+fmt(today)+'';
 const [y,m]=month.split('-').map(Number), first=new Date(y,m-1,1),last=new Date(y,m,0).getDate();
-document.querySelector('#month-title').textContent=first.toLocaleDateString('gl-ES',{month:'long',year:'numeric'});
+document.querySelector('#month-title').textContent=monthLabel(y,m);
 let cells=Array.from({length:(first.getDay()+6)%7},()=>'<span class="day empty"></span>');
 for(let n=1;n<=last;n++){const key=month+'-'+String(n).padStart(2,'0'),list=events.filter(e=>matches(e)&&e.start<=key&&e.end>=key);cells.push(`<button type="button" class="day ${key===today?'is-today':''} ${key<today?'is-past':''} ${selected===key?'selected':''}" data-day="${key}" aria-label="${esc(fmt(key))}: ${list.length} eventos"><strong>${n}</strong>${list.length?'<span>'+list.length+' cita'+(list.length>1?'s':'')+'</span>':''}</button>`);}
 document.querySelector('#days').innerHTML=cells.join('');
@@ -27,7 +29,7 @@ else{
   const firstMonth=groups.keys().next().value;
   container.innerHTML=[...groups].map(([key,items])=>{
     const [year,mon]=key.split('-').map(Number);
-    const label=new Date(year,mon-1,1).toLocaleDateString('gl-ES',{month:'long',year:'numeric'});
+    const label=monthLabel(year,mon);
     const expanded=previouslyOpen.size?previouslyOpen.has(key):key===firstMonth;
     return '<details class="month-events" data-month="'+key+'" '+(expanded?'open':'')+'><summary><span class="month-title">'+esc(label)+'</span><span class="month-count">'+items.length+' evento'+(items.length!==1?'s':'')+'</span><span class="month-chevron" aria-hidden="true">⌄</span></summary><div class="month-fixtures">'+items.map(card).join('')+'</div></details>';
   }).join('');
