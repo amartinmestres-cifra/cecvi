@@ -1,3 +1,16 @@
 {
-  "publicaciones": []
+  "publicaciones": [
+    {
+      "titulo": "Bronce no Campionato do Mundo de veteranos",
+      "fecha": "2026-10-23",
+      "imagen": "/assets/publicaciones/2026-10-nena-cano-bronce-tbilisi.jpg",
+      "texto": "Nena Cano conquista a medalla de bronce na categoría Veteranos 2 feminina do Campionato do Mundo de Tbilisi.\nParabéns, Nena!"
+    },
+    {
+      "titulo": "Tres medallas para o CECVi no TGR de Espada de Vigo",
+      "fecha": "2026-10-18",
+      "imagen": "/assets/publicaciones/2026-10-tgr-espada-vigo-m11.jpg",
+      "texto": "Na categoría M11 mixta, Clara Pérez e Noel Martín-Mestres sobem ao podio cun terceiro posto cada un, e Saúl Fernández remata quinto.\nGrande traballo da canteira na casa!"
+    }
+  ]
 }
